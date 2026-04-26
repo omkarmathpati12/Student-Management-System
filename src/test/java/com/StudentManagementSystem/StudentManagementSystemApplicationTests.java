@@ -1,4 +1,4 @@
-package com.example.StudentManagementSystem;
+package com.StudentManagementSystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
