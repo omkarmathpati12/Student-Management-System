@@ -29,4 +29,17 @@ public class CourseService {
         courseResponse.setCourseCode(savedCourseEntity.getCourseCode());
         return courseResponse;
     }
+
+    public CourseResponse updateCourse(CourseRequest courseRequest,Long courseId) {
+        CourseEntity courseEntity = courseRepo.findById(courseId).
+                orElseThrow(()-> new RuntimeException("Course not found"));
+        courseEntity.setCourseName(courseRequest.getCourseName());
+        courseEntity.setCourseCode(courseRequest.getCourseCode());
+        CourseEntity savedCourseEntity = courseRepo.save(courseEntity);
+        CourseResponse courseResponse = new CourseResponse();
+        courseResponse.setCourseId(savedCourseEntity.getCourseId());
+        courseResponse.setCourseName(savedCourseEntity.getCourseName());
+        courseResponse.setCourseCode(savedCourseEntity.getCourseCode());
+        return courseResponse;
+    }
 }

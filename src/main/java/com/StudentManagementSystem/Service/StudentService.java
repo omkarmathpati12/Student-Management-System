@@ -5,6 +5,7 @@ import com.StudentManagementSystem.Dto.StudentResponse;
 import com.StudentManagementSystem.Entity.CourseEntity;
 import com.StudentManagementSystem.Entity.DepartmentEntity;
 import com.StudentManagementSystem.Entity.StudentEntity;
+import com.StudentManagementSystem.Exception.DepartmentNotFoundException;
 import com.StudentManagementSystem.Exception.StudentAlreadyExists;
 import com.StudentManagementSystem.Exception.StudentNotFoundException;
 import com.StudentManagementSystem.Repository.CourseRepo;
@@ -40,7 +41,7 @@ public class StudentService {
         studentEntity.setGender(studentRequest.getGender());
 
         DepartmentEntity departmentEntity = departmentRepo.findById(studentRequest.getDepartmentId())
-                .orElseThrow(() -> new RuntimeException("Department Not Found"));
+                .orElseThrow(() -> new DepartmentNotFoundException("Department Not Found"));
         studentEntity.setDepartment(departmentEntity);
 
 
@@ -54,9 +55,6 @@ public class StudentService {
         }
         studentEntity.setCourses(courseEntity);
 
-
-
-
         StudentEntity result = studentRepo.save(studentEntity);
 
         StudentResponse studentResponse = new StudentResponse();
@@ -66,5 +64,43 @@ public class StudentService {
         studentResponse.setGender(result.getGender());
         studentResponse.setRegistrationDate(result.getRegistrationDate());
         return studentResponse;
+    }
+
+    public StudentResponse updateStudent(Long id,StudentRequest studentRequest) {
+        StudentEntity student=studentRepo.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student Not Found"));
+
+        if(studentRequest.getName()!=null){
+            student.setName(studentRequest.getName());
+        }
+        if(studentRequest.getEmail()!=null){
+            student.setEmail(studentRequest.getEmail());
+        }
+        if(studentRequest.getPhone()!=null){
+            student.setPhone(studentRequest.getPhone());
+        }
+
+        if(studentRequest.getDepartmentId()!=null){
+            DepartmentEntity department=departmentRepo.findById(studentRequest.getDepartmentId())
+                    .orElseThrow(() -> new DepartmentNotFoundException("Department Not Found"));
+            student.setDepartment(department);
+        }
+        if(studentRequest.getCourseIds()!=null && !studentRequest.getCourseIds().isEmpty()){
+            List<CourseEntity> courseEntities=courseRepo.findAllById(studentRequest.getCourseIds());
+            if(courseEntities.size()!=studentRequest.getCourseIds().size()){
+                throw new RuntimeException("Course Size Mismatch");
+            }
+            student.setCourses(courseEntities);
+        }
+
+        StudentEntity result = studentRepo.save(student);
+        StudentResponse studentResponse = new StudentResponse();
+        studentResponse.setName(result.getName());
+        studentResponse.setEmail(result.getEmail());
+        studentResponse.setPhone(result.getPhone());
+        studentResponse.setGender(result.getGender());
+        studentResponse.setRegistrationDate(result.getRegistrationDate());
+        return studentResponse;
+
     }
 }

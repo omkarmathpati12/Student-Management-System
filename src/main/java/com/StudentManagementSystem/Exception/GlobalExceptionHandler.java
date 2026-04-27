@@ -19,4 +19,10 @@ public class GlobalExceptionHandler {
     public String handleStudentAlreadyExists(StudentAlreadyExists ex) {
         return ex.getMessage();
     }
+
+    @ExceptionHandler(DepartmentNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleDepartmentNotFoundException(DepartmentNotFoundException ex) {
+        return ex.getMessage();
+    }
 }

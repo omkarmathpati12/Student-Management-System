@@ -5,10 +5,7 @@ import com.StudentManagementSystem.Dto.DepartmentResponse;
 import com.StudentManagementSystem.Service.DepartmentService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/department")
@@ -23,6 +20,12 @@ public class DepartmentController {
     @PostMapping("/add")
     public ResponseEntity<DepartmentResponse> addDepartment(@Valid @RequestBody DepartmentRequest departmentRequest) {
         DepartmentResponse departmentResponse = departmentService.addDepartment(departmentRequest);
+        return ResponseEntity.ok(departmentResponse);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<DepartmentResponse> updateDepartment(@Valid @RequestBody DepartmentRequest departmentRequest, @PathVariable Long id) {
+        DepartmentResponse departmentResponse = departmentService.updateDepartment(departmentRequest, id);
         return ResponseEntity.ok(departmentResponse);
     }
 }

@@ -5,10 +5,7 @@ import com.StudentManagementSystem.Dto.CourseResponse;
 import com.StudentManagementSystem.Service.CourseService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/course")
@@ -23,6 +20,12 @@ public class CourseController {
     @PostMapping("/add")
     public ResponseEntity<CourseResponse> saveCourse(@Valid @RequestBody CourseRequest courseRequest) {
         CourseResponse courseResponse = courseService.addCourse(courseRequest);
+        return ResponseEntity.ok(courseResponse);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest, @PathVariable Long id) {
+        CourseResponse courseResponse = courseService.updateCourse(courseRequest, id);
         return ResponseEntity.ok(courseResponse);
     }
 }
