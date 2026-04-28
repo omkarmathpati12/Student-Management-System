@@ -3,8 +3,11 @@ package com.StudentManagementSystem.Controller;
 import com.StudentManagementSystem.Dto.StudentRequest;
 import com.StudentManagementSystem.Dto.StudentResponse;
 import com.StudentManagementSystem.Service.StudentService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/student")
@@ -38,5 +41,15 @@ public class StudentController {
     public ResponseEntity<StudentResponse> getStudentById(@PathVariable Long id) {
         StudentResponse response=studentService.getStudent(id);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<StudentResponse>> getAllStudents() {
+        return ResponseEntity.ok(studentService.getStudents());
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<StudentResponse>> getAllStudents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(studentService.getStudents(page, size));
     }
 }

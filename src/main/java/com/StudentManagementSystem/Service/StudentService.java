@@ -12,8 +12,10 @@ import com.StudentManagementSystem.Repository.CourseRepo;
 import com.StudentManagementSystem.Repository.DepartmentRepo;
 import com.StudentManagementSystem.Repository.StudentRepo;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -121,6 +123,36 @@ public class StudentService {
         studentResponse.setGender(student.getGender());
         studentResponse.setRegistrationDate(student.getRegistrationDate());
         return studentResponse;
+    }
+
+    public List<StudentResponse> getStudents(){
+        List<StudentEntity> student = studentRepo.findAll();
+        List<StudentResponse> studentResponse=new ArrayList<>();
+        for(StudentEntity studentEntity:student){
+            StudentResponse response=new StudentResponse();
+            response.setName(studentEntity.getName());
+            response.setEmail(studentEntity.getEmail());
+            response.setPhone(studentEntity.getPhone());
+            response.setGender(studentEntity.getGender());
+            response.setRegistrationDate(studentEntity.getRegistrationDate());
+            studentResponse.add(response);
+        }
+        return studentResponse;
+    }
+
+    public Page<StudentResponse> getStudents(int page, int size){
+        Page<StudentEntity> student = studentRepo.findAll(PageRequest.of(page, size));
+        List<StudentResponse> studentResponse=new ArrayList<>();
+        for(StudentEntity studentEntity:student){
+            StudentResponse response=new StudentResponse();
+            response.setName(studentEntity.getName());
+            response.setEmail(studentEntity.getEmail());
+            response.setPhone(studentEntity.getPhone());
+            response.setGender(studentEntity.getGender());
+            response.setRegistrationDate(studentEntity.getRegistrationDate());
+            studentResponse.add(response);
+        }
+        return new PageImpl<>(studentResponse, PageRequest.of(page, size), student.getTotalElements());
     }
 
 }
