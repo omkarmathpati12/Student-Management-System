@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CourseResponse {
     private Long courseId;
-    private CourseEntity.Courses courseName;
+    private CourseEntity.Courses name;
     private String courseCode;
 }

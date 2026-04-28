@@ -5,9 +5,11 @@ import com.StudentManagementSystem.Dto.StudentResponse;
 import com.StudentManagementSystem.Entity.CourseEntity;
 import com.StudentManagementSystem.Entity.DepartmentEntity;
 import com.StudentManagementSystem.Entity.StudentEntity;
+import com.StudentManagementSystem.Exception.CourseNotFoundException;
 import com.StudentManagementSystem.Exception.DepartmentNotFoundException;
 import com.StudentManagementSystem.Exception.StudentAlreadyExists;
 import com.StudentManagementSystem.Exception.StudentNotFoundException;
+import com.StudentManagementSystem.Mapper.DTOMapper;
 import com.StudentManagementSystem.Repository.CourseRepo;
 import com.StudentManagementSystem.Repository.DepartmentRepo;
 import com.StudentManagementSystem.Repository.StudentRepo;
@@ -25,11 +27,13 @@ public class StudentService {
     private final StudentRepo studentRepo;
     private final DepartmentRepo departmentRepo;
     private final CourseRepo courseRepo;
+    private final DTOMapper dtoMapper;
 
-    public StudentService(StudentRepo studentRepo, DepartmentRepo departmentRepo, CourseRepo courseRepo) {
+    public StudentService(StudentRepo studentRepo, DepartmentRepo departmentRepo, CourseRepo courseRepo, DTOMapper dtoMapper) {
         this.studentRepo = studentRepo;
         this.departmentRepo = departmentRepo;
         this.courseRepo = courseRepo;
+        this.dtoMapper = dtoMapper;
     }
 
     public StudentResponse registerStudent(StudentRequest studentRequest) {
@@ -49,7 +53,7 @@ public class StudentService {
 
         List<CourseEntity> courseEntity=courseRepo.findAllById(studentRequest.getCourseIds());
         if(courseEntity.isEmpty()){
-            throw new RuntimeException("Course Not Found");
+            throw new CourseNotFoundException("Course Not Found");
         }
 
         if(courseEntity.size() != studentRequest.getCourseIds().size()){
@@ -142,8 +146,16 @@ public class StudentService {
 
     public Page<StudentResponse> getStudents(int page, int size){
         Page<StudentEntity> student = studentRepo.findAll(PageRequest.of(page, size));
+        return student.map(dtoMapper::mapToResponse);
+    }
+
+    public List<StudentResponse> getAllStudentCourses(String courseName){
+        CourseEntity course=courseRepo.findByName(courseName)
+                .orElseThrow(() -> new CourseNotFoundException("Course Not Found"));
+
+        List<StudentEntity> students=course.getStudents();
         List<StudentResponse> studentResponse=new ArrayList<>();
-        for(StudentEntity studentEntity:student){
+        for(StudentEntity studentEntity:students){
             StudentResponse response=new StudentResponse();
             response.setName(studentEntity.getName());
             response.setEmail(studentEntity.getEmail());
@@ -152,7 +164,7 @@ public class StudentService {
             response.setRegistrationDate(studentEntity.getRegistrationDate());
             studentResponse.add(response);
         }
-        return new PageImpl<>(studentResponse, PageRequest.of(page, size), student.getTotalElements());
+        return studentResponse;
     }
 
 }

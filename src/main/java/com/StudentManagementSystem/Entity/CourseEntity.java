@@ -14,7 +14,7 @@ public class CourseEntity {
     private Long courseId;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Courses courseName;
+    private Courses name;
     @Column(nullable = false, unique = true)
     private String courseCode;
     @ManyToMany(mappedBy = "courses")

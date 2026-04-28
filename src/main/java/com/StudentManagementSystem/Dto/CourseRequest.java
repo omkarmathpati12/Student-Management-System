@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CourseRequest {
     @NotNull
-    private CourseEntity.Courses courseName;
+    private CourseEntity.Courses name;
     @NotBlank
     private String courseCode;
 }

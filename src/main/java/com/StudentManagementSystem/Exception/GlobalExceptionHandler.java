@@ -25,4 +25,10 @@ public class GlobalExceptionHandler {
     public String handleDepartmentNotFoundException(DepartmentNotFoundException ex) {
         return ex.getMessage();
     }
+
+    @ExceptionHandler(CourseNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleCourseNotFoundException(CourseNotFoundException ex) {
+        return ex.getMessage();
+    }
 }
