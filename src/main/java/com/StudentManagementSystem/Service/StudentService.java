@@ -111,4 +111,16 @@ public class StudentService {
         return "Student Deleted Successfully";
     }
 
+    public StudentResponse getStudent(Long id){
+        StudentEntity student = studentRepo.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student Not Found"));
+        StudentResponse studentResponse = new StudentResponse();
+        studentResponse.setName(student.getName());
+        studentResponse.setEmail(student.getEmail());
+        studentResponse.setPhone(student.getPhone());
+        studentResponse.setGender(student.getGender());
+        studentResponse.setRegistrationDate(student.getRegistrationDate());
+        return studentResponse;
+    }
+
 }

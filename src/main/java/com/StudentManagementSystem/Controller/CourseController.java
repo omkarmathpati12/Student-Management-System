@@ -23,7 +23,7 @@ public class CourseController {
         return ResponseEntity.ok(courseResponse);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<CourseResponse> updateCourse(@Valid @RequestBody CourseRequest courseRequest, @PathVariable Long id) {
         CourseResponse courseResponse = courseService.updateCourse(courseRequest, id);
         return ResponseEntity.ok(courseResponse);
