@@ -42,4 +42,11 @@ public class CourseService {
         courseResponse.setCourseCode(savedCourseEntity.getCourseCode());
         return courseResponse;
     }
+
+    public String deleteCourse(Long courseId) {
+        CourseEntity course=courseRepo.findById(courseId)
+                .orElseThrow(()-> new RuntimeException("Course not found"));
+        courseRepo.deleteById(courseId);
+        return "Course Deleted Successfully";
+    }
 }

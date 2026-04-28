@@ -66,7 +66,7 @@ public class StudentService {
         return studentResponse;
     }
 
-    public StudentResponse updateStudent(Long id,StudentRequest studentRequest) {
+    public String updateStudent(Long id,StudentRequest studentRequest) {
         StudentEntity student=studentRepo.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student Not Found"));
 
@@ -100,7 +100,15 @@ public class StudentService {
         studentResponse.setPhone(result.getPhone());
         studentResponse.setGender(result.getGender());
         studentResponse.setRegistrationDate(result.getRegistrationDate());
-        return studentResponse;
+        return "Student Updated Successfully";
 
     }
+
+    public String deleteStudent(Long id){
+        StudentEntity student=studentRepo.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student Not Found"));
+        studentRepo.delete(student);
+        return "Student Deleted Successfully";
+    }
+
 }

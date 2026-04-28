@@ -23,8 +23,14 @@ public class StudentController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<StudentResponse> updateStudent(@RequestBody StudentRequest studentRequest, @PathVariable Long id) {
-        StudentResponse studentResponse = studentService.updateStudent(id, studentRequest);
-        return ResponseEntity.ok(studentResponse);
+    public ResponseEntity<String> updateStudent(@RequestBody StudentRequest studentRequest, @PathVariable Long id) {
+        java.lang.String response = studentService.updateStudent(id, studentRequest);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
+        String response = studentService.deleteStudent(id);
+        return ResponseEntity.ok(response);
     }
 }

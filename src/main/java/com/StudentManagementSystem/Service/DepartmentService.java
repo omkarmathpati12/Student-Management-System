@@ -45,4 +45,11 @@ public class DepartmentService {
         departmentResponse.setDepartmentCode(update.getDepartmentCode());
         return departmentResponse;
     }
+
+    public String deleteDepartment(Long id){
+        DepartmentEntity department=departmentRepo.findById(id)
+                .orElseThrow(() -> new DepartmentNotFoundException("Department not found"));
+        departmentRepo.delete(department);
+        return "Department Deleted Successfully";
+    }
 }
